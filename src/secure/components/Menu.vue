@@ -22,6 +22,11 @@
             Products
           </router-link>
         </li>
+        <li class="nav-item">
+          <router-link to="/orders" class="nav-link" active-class="active" aria-current="page">
+            Orders
+          </router-link>
+        </li>
       </ul>
     </div>
   </nav>
