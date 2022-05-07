@@ -14,6 +14,7 @@ import ProductsCreate from '@/secure/products/ProductsCreate.vue'
 import ProductsEdit from '@/secure/products/ProductsEdit.vue'
 import Orders from '@/secure/orders/Orders.vue'
 import OrderItems from '@/secure/orders/OrderItems.vue'
+import Profile from '@/secure/profile/Profile.vue'
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/sign-up', component: Register },
@@ -24,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
     children: [
       { path: '', redirect: 'dashboard'},
       { path: '/dashboard', component: Dashboard},
+      { path: '/profile', component: Profile},
       { path: '/users', component: Users},
       { path: '/users/create', component: UsersCreate},
       { path: '/users/:id/edit', component: UsersEdit},

@@ -15,13 +15,17 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import {useRouter} from "vue-router";
+import { useStore } from 'vuex';
 
 export default {
   name: "Nav",
-  props: ['user'],
   setup() {
-    let router = useRouter();
+    const router = useRouter();
+    const store = useStore();
+
+    const user = computed(() => store.state.User.user);
 
     const LOGOUT = () => {
       localStorage.clear();
@@ -29,6 +33,7 @@ export default {
     }
 
     return {
+      user,
       LOGOUT
     }
   }
