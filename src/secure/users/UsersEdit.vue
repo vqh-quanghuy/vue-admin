@@ -28,10 +28,10 @@
       </select>
     </div>
     <div class="row mt-2">
-      <div class="col-sm-1">
+      <div class="col-2 col-xl-1">
         <button class="btn btn-outline-secondary w-100">Update User</button>
       </div>
-      <div class="col-sm-1">
+      <div class="col-2 col-xl-1">
         <router-link to="/users" class="nav-link" active-class="active" aria-current="page">
           Back
         </router-link>

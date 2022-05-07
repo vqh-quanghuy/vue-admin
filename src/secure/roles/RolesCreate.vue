@@ -8,7 +8,7 @@
     </div>
     <div class="row my-1">
       <label for="permission" class="col-sm-2 col-form-label">Permissions</label>
-      <div class="col-sm-3">
+      <div class="col-10">
         <div v-for="permission in PERMISSIONS" :key="permission.id" class="form-check form-check-inline col-4">
           <input :value="permission.id" @change="SELECT(permission.id, $event.target.checked)" type="checkbox" class="form-check-input">
           <label class="form-check-label">{{ permission.name }}</label>
@@ -16,10 +16,10 @@
       </div>
     </div>
     <div class="row mt-2">
-      <div class="col-sm-1">
+      <div class="col-2 col-xl-1">
         <button class="btn btn-outline-secondary w-100">Create</button>
       </div>
-      <div class="col-sm-1">
+      <div class="col-2 col-xl-1">
         <router-link to="/roles" class="nav-link" active-class="active" aria-current="page">
           Back
         </router-link>

@@ -22,7 +22,7 @@
     
     <div class="row mt-2">
       <div class="col-2 col-xl-1">
-        <button class="btn btn-outline-secondary w-100">Create</button>
+        <button class="btn btn-outline-secondary w-100">Update Product</button>
       </div>
       <div class="col-2 col-xl-1">
         <router-link to="/products" class="nav-link" active-class="active" aria-current="page">
@@ -34,13 +34,14 @@
 </template>
 
 <script lang="ts" >
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ImageUpload from '@/secure/components/ImageUpload.vue'
+import { Product } from '@/classes/product';
 
 export default {
-  name: "ProductsCreate",
+  name: "ProductsEdit",
   components: { ImageUpload },
   setup() {
     const TITLE = ref('');
@@ -48,9 +49,21 @@ export default {
     const IMAGE = ref('');
     const PRICE = ref(0);
     let router = useRouter();
+    let { params } = useRoute();
+
+    onMounted( async () => {
+      let response = await axios.get(`products/${params.id}`);
+
+      const PRODUCT:Product = response.data.data;
+
+      TITLE.value = PRODUCT.title;
+      DESCRIPTION.value = PRODUCT.description;
+      IMAGE.value = PRODUCT.image;
+      PRICE.value = PRODUCT.price;
+    })
 
     const SUBMIT = async () => {
-      let response = await axios.post('products', {
+      let response = await axios.put(`products/${params.id}`, {
         title: TITLE.value,
         description: DESCRIPTION.value,
         image: IMAGE.value,
