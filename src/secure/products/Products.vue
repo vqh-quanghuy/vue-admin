@@ -1,9 +1,7 @@
 <template>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <div class="btn-toolbar mb-2 mb-md-2">
-      <router-link to="/products/create" class="btn btn-sm btn-outline-secondary"
-        >Add</router-link
-      >
+      <router-link v-if="AUTHENTICATED.canEdit('products')" to="/products/create" class="btn btn-sm btn-outline-secondary">Add</router-link>
     </div>
   </div>
   <div class="table-responsive">
@@ -15,7 +13,7 @@
           <th scope="col">Title</th>
           <th scope="col">Description</th>
           <th scope="col">Price</th>
-          <th scope="col" width="160">Action</th>
+          <th v-if="AUTHENTICATED.canEdit('products')" scope="col" width="160">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -27,14 +25,10 @@
           <td>{{ product.price }}</td>
           <td>
             <div class="btn-group mx-1">
-              <router-link
-                :to="`/products/${product.id}/edit`"
-                class="btn btn-sm btn-outline-secondary mx-1"
-                >Edit</router-link
-              >
+              <router-link v-if="AUTHENTICATED.canEdit('products')" :to="`/products/${product.id}/edit`" class="btn btn-sm btn-outline-secondary mx-1">Edit</router-link>
             </div>
             <div class="btn-group mx-1">
-              <a @click="DEL(product.id)" href="javascript:void(0)" class="btn btn-sm btn-outline-secondary mx-1">Delete</a>
+              <a v-if="AUTHENTICATED.canEdit('products')" @click="DEL(product.id)" href="javascript:void(0)" class="btn btn-sm btn-outline-secondary mx-1">Delete</a>
             </div>
           </td>
         </tr>
@@ -45,10 +39,11 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { Entity } from "@/interfaces/entity";
 import Paginator from '@/secure/components/Paginator.vue';
+import { useStore } from 'vuex';
 
 export default {
   components: { Paginator },
@@ -56,6 +51,9 @@ export default {
   setup() {
     const PRODUCTS = ref([]);
     let lastPage = ref(0);
+    let store = useStore();
+
+    const AUTHENTICATED = computed(() => store.state.User.user);
 
     const LOAD = async (page = 1) => {
       let response = await axios.get(`products?page=${page}`);
@@ -80,6 +78,7 @@ export default {
 
     return {
       PRODUCTS,
+      AUTHENTICATED,
       lastPage,
       DEL,
       LOAD

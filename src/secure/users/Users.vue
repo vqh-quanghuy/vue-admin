@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <div class="btn-toolbar mb-2 mb-md-2">
-      <router-link to="/users/create" class="btn btn-sm btn-outline-secondary">Add</router-link>
+      <router-link v-if="AUTHENTICATED.canEdit('users')" to="/users/create" class="btn btn-sm btn-outline-secondary">Add</router-link>
     </div>
   </div>
   <div class="table-responsive">
@@ -12,7 +12,7 @@
           <th scope="col">Name</th>
           <th scope="col">Email</th>
           <th scope="col">Role</th>
-          <th scope="col">Action</th>
+          <th v-if="AUTHENTICATED.canEdit('users')" scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -23,14 +23,10 @@
           <td>{{ user.role.name }}</td>
           <td>
             <div class="btn-group mr-2">
-              <router-link
-                :to="`/users/${user.id}/edit`"
-                class="btn btn-sm btn-outline-secondary mx-1"
-                >Edit</router-link
-              >
+              <router-link v-if="AUTHENTICATED.canEdit('users')" :to="`/users/${user.id}/edit`" class="btn btn-sm btn-outline-secondary mx-1">Edit</router-link>
             </div>
             <div class="btn-group mr-2">
-              <a @click="DEL(user.id)" href="javascript:void(0)" class="btn btn-sm btn-outline-secondary mx-1">Delete</a>
+              <a v-if="AUTHENTICATED.canEdit('users')" @click="DEL(user.id)" href="javascript:void(0)" class="btn btn-sm btn-outline-secondary mx-1">Delete</a>
             </div>
           </td>
         </tr>
@@ -41,10 +37,11 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import { Entity } from "@/interfaces/entity";
 import Paginator from '@/secure/components/Paginator.vue';
+import { useStore } from 'vuex';
 
 export default {
   components: { Paginator },
@@ -52,6 +49,9 @@ export default {
   setup() {
     const USERS = ref([]);
     let lastPage = ref(0);
+    let store = useStore();
+
+    const AUTHENTICATED = computed(() => store.state.User.user);
 
     const LOAD = async (page = 1) => {
       let response = await axios.get(`users?page=${page}`);
@@ -74,6 +74,7 @@ export default {
 
     return {
       USERS,
+      AUTHENTICATED,
       lastPage,
       DEL,
       LOAD

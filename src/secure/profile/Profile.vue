@@ -70,7 +70,16 @@ export default {
         email: EMAIL.value,
       });
 
-      await store.dispatch('User/setUser', response.data.data);
+      const u: User = response.data.data;
+
+      await store.dispatch('User/setUser', new User(
+        u.id,
+        u.first_name,
+        u.last_name,
+        u.email,
+        u.role,
+        u.permissions
+      ));
     }
 
     const SUBMIT_PASSWORD = async () => {

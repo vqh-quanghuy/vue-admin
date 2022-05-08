@@ -7,22 +7,22 @@
             Dashboard
           </router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="USER.canView('users')" class="nav-item">
           <router-link to="/users" class="nav-link" active-class="active" aria-current="page">
             Users
           </router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="USER.canView('roles')" class="nav-item">
           <router-link to="/roles" class="nav-link" active-class="active" aria-current="page">
             Roles
           </router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="USER.canView('products')" class="nav-item">
           <router-link to="/products" class="nav-link" active-class="active" aria-current="page">
             Products
           </router-link>
         </li>
-        <li class="nav-item">
+        <li v-if="USER.canView('orders')" class="nav-item">
           <router-link to="/orders" class="nav-link" active-class="active" aria-current="page">
             Orders
           </router-link>
@@ -33,8 +33,18 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 export default {
-  name: "Menu"
+  name: "Menu",
+  setup() {
+    let store = useStore();
+    const USER = computed(() => store.state.User.user);
+
+    return {
+      USER
+    }
+  }
 }
 </script>
 
